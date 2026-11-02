@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  
+  <!-- Defensive Content Security Policy -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; media-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+
+  <title>CarCraft - Complete Inventory | 26+ Verified Cars</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="cc-header">
+    <a href="index.html" class="cc-brand-wrap" aria-label="CarCraft Home">
+      <div class="cc-brand-logo">
+        <span>⚡</span> CarCraft
+      </div>
+      <span class="cc-brand-badge">Inventory Hub</span>
+    </a>
+
+    <nav class="cc-nav" aria-label="Main Navigation">
+      <a href="index.html" class="cc-nav-link">Home</a>
+      <a href="car.html" class="cc-nav-link is-active">Inventory</a>
+      <a href="index.html#trending-section" class="cc-nav-link">Trending</a>
+      <a href="index.html#emi-calculator-section" class="cc-nav-link">EMI Calculator</a>
+      <a href="index.html#trust-section" class="cc-nav-link">Why Us</a>
+    </nav>
+
+    <div class="cc-header-actions">
+      <!-- City Selector Button -->
+      <button type="button" class="cc-city-btn" id="city-selector-trigger" title="Change Location">
+        <span>📍</span>
+        <span id="current-city-label">Mumbai</span>
+        <span>▾</span>
+      </button>
+
+      <!-- Wishlist Action -->
+      <button type="button" class="cc-action-badge-btn" id="nav-wishlist-btn" title="View Saved Cars">
+        <span>♥</span>
+        <span class="badge-counter" id="wishlist-badge-count" style="display: none;">0</span>
+      </button>
+
+      <!-- Compare Action -->
+      <button type="button" class="cc-action-badge-btn" id="nav-compare-btn" title="Compare Cars">
+        <span>⚖</span>
+        <span class="badge-counter" id="compare-badge-count" style="display: none;">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Inventory Header & Search -->
+  <div style="background: linear-gradient(180deg, rgba(14, 22, 38, 0.9) 0%, rgba(7, 10, 19, 1) 100%); padding: 50px 20px 30px; border-bottom: 1px solid var(--border-color);">
+    <div style="max-width: 1400px; margin: 0 auto;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px; margin-bottom: 24px;">
+        <div>
+          <span style="font-size: 13px; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 1px;">Direct Showroom Hub</span>
+          <h1 style="font-size: clamp(28px, 4vw, 42px); font-weight: 800; margin-top: 4px;">Verified Vehicle Inventory</h1>
+          <p style="color: var(--text-muted); font-size: 15px; margin-top: 4px;">Browse through 26 verified automotive models with authentic on-road pricing and technical telemetry.</p>
+        </div>
+
+        <!-- Direct Search Bar -->
+        <div style="min-width: 320px; flex-grow: 0.5;">
+          <div class="search-input-wrap">
+            <span class="search-icon">🔍</span>
+            <input 
+              type="search" 
+              id="main-search-input" 
+              class="cc-main-search-input" 
+              placeholder="Search by model, brand, engine or body..." 
+              autocomplete="off" 
+              spellcheck="false"
+              maxlength="80"
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Brand Chips Bar -->
+      <div class="brand-chips-wrap" id="brand-chips-container">
+        <!-- Rendered safely via app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Catalog Section -->
+  <main class="cc-section" id="catalog-section" style="padding-top: 30px;">
+    <!-- Filter & Sort Toolbar -->
+    <div class="catalog-toolbar">
+      <div class="toolbar-filters-group">
+        <!-- Body Type -->
+        <select id="filter-body-type" class="filter-select" aria-label="Filter by Body Type">
+          <option value="all">All Body Types</option>
+          <option value="SUV">SUV</option>
+          <option value="Sedan">Sedan</option>
+          <option value="Hatchback">Hatchback</option>
+          <option value="MUV">MUV / MPV</option>
+          <option value="Coupe">Coupe / Roadster</option>
+        </select>
+
+        <!-- Fuel Type -->
+        <select id="filter-fuel-type" class="filter-select" aria-label="Filter by Fuel Type">
+          <option value="all">All Fuel Types</option>
+          <option value="Petrol">Petrol</option>
+          <option value="Diesel">Diesel</option>
+          <option value="Electric">Electric (EV)</option>
+          <option value="Hybrid">Hybrid</option>
+          <option value="CNG">CNG</option>
+        </select>
+
+        <!-- Transmission -->
+        <select id="filter-transmission" class="filter-select" aria-label="Filter by Transmission">
+          <option value="all">All Transmissions</option>
+          <option value="Automatic">Automatic</option>
+          <option value="Manual">Manual</option>
+        </select>
+
+        <!-- Budget Range -->
+        <select id="filter-budget" class="filter-select" aria-label="Filter by Budget Range">
+          <option value="all">All Budgets</option>
+          <option value="under-10">Under ₹ 10 Lakh</option>
+          <option value="10-20">₹ 10 - 20 Lakh</option>
+          <option value="20-40">₹ 20 - 40 Lakh</option>
+          <option value="luxury-40">₹ 40+ Lakh (Luxury)</option>
+        </select>
+
+        <!-- Clear Filters -->
+        <button type="button" id="btn-reset-filters" class="btn-reset-filters">
+          Reset <span id="active-filter-count"></span>
+        </button>
+      </div>
+
+      <div class="toolbar-meta">
+        <span class="catalog-count-badge" id="catalog-count-label">Loading cars...</span>
+        <select id="catalog-sort-select" class="filter-select" aria-label="Sort Catalog">
+          <option value="recommended">Featured / Trending</option>
+          <option value="price-low">Price: Low to High</option>
+          <option value="price-high">Price: High to Low</option>
+          <option value="mileage">Highest Mileage</option>
+          <option value="name">Alphabetical (A-Z)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Catalog Cars Grid -->
+    <div class="car-cards-grid" id="main-catalog-container">
+      <!-- Injected securely via app.js -->
+    </div>
+
+    <!-- Empty State Message -->
+    <div class="catalog-empty-state" id="catalog-empty-state" style="display: none;">
+      <h3>No vehicles match your criteria</h3>
+      <p>Try resetting filters or adjusting your budget range.</p>
+    </div>
+  </main>
+
+  <!-- ========================================================================
+       MODALS & DRAWERS (Zero XSS)
+       ======================================================================== -->
+
+  <!-- Car Detail Modal -->
+  <div class="cc-modal" id="car-detail-modal" role="dialog" aria-modal="true" aria-labelledby="car-modal-title">
+    <div class="cc-modal-backdrop"></div>
+    <div class="cc-modal-dialog">
+      <div class="cc-modal-header">
+        <h3 id="car-modal-title">Vehicle Technical Profile</h3>
+        <button type="button" class="cc-modal-close" aria-label="Close Modal">&times;</button>
+      </div>
+      <div class="cc-modal-body" id="car-modal-content-slot">
+        <!-- Rendered safely by app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Side-by-Side Comparison Modal -->
+  <div class="cc-modal" id="compare-modal" role="dialog" aria-modal="true" aria-labelledby="compare-modal-title">
+    <div class="cc-modal-backdrop"></div>
+    <div class="cc-modal-dialog" style="max-width: 1000px;">
+      <div class="cc-modal-header">
+        <h3 id="compare-modal-title">Side-by-Side Vehicle Comparison</h3>
+        <button type="button" class="cc-modal-close" aria-label="Close Modal">&times;</button>
+      </div>
+      <div class="cc-modal-body" id="compare-table-slot">
+        <!-- Rendered safely by app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Book Test Drive Modal -->
+  <div class="cc-modal" id="testdrive-modal" role="dialog" aria-modal="true" aria-labelledby="td-modal-title">
+    <div class="cc-modal-backdrop"></div>
+    <div class="cc-modal-dialog" style="max-width: 580px;">
+      <div class="cc-modal-header">
+        <h3 id="td-modal-title">Schedule a VIP Test Drive</h3>
+        <button type="button" class="cc-modal-close" aria-label="Close Modal">&times;</button>
+      </div>
+      <div class="cc-modal-body">
+        <!-- Test Drive Form -->
+        <form id="testdrive-form" class="cc-form" novalidate>
+          <div class="form-group">
+            <label for="td-name-input" class="form-label">Full Name *</label>
+            <input type="text" id="td-name-input" class="form-input" placeholder="e.g. Rahul Sharma" required maxlength="50">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="td-phone-input" class="form-label">Phone Number *</label>
+              <input type="tel" id="td-phone-input" class="form-input" placeholder="10-digit mobile" required maxlength="10">
+            </div>
+            <div class="form-group">
+              <label for="td-email-input" class="form-label">Email Address *</label>
+              <input type="email" id="td-email-input" class="form-input" placeholder="name@domain.com" required maxlength="80">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="td-car-select" class="form-label">Select Vehicle Model *</label>
+            <select id="td-car-select" class="form-select" required>
+              <!-- Populated by app.js -->
+            </select>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="td-city-select" class="form-label">Preferred Hub Location</label>
+              <select id="td-city-select" class="form-select">
+                <option value="Mumbai">Mumbai Main Hub</option>
+                <option value="Delhi-NCR">Delhi-NCR Central</option>
+                <option value="Bengaluru">Bengaluru Tech Hub</option>
+                <option value="Hyderabad">Hyderabad Cyber Hub</option>
+                <option value="Pune">Pune Autocity</option>
+                <option value="Chennai">Chennai Hub</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="td-date-input" class="form-label">Preferred Date *</label>
+              <input type="date" id="td-date-input" class="form-input" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="td-time-select" class="form-label">Time Slot</label>
+            <select id="td-time-select" class="form-select">
+              <option value="Morning (10:00 AM - 1:00 PM)">Morning (10:00 AM - 1:00 PM)</option>
+              <option value="Afternoon (1:00 PM - 4:00 PM)">Afternoon (1:00 PM - 4:00 PM)</option>
+              <option value="Evening (4:00 PM - 7:00 PM)">Evening (4:00 PM - 7:00 PM)</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn-form-submit">Confirm Test Drive Booking</button>
+          <p class="form-security-note">🔒 Your contact info is strictly confidential and never shared with 3rd parties.</p>
+        </form>
+
+        <!-- Success Alert (Initially Hidden) -->
+        <div id="testdrive-success-alert" class="success-alert-box" style="display: none;">
+          <span class="success-icon">✓</span>
+          <h3>Booking Successfully Confirmed!</h3>
+          <div class="booking-ref-badge" id="td-ref-id-display">CC-2026-00000</div>
+          <p id="td-success-desc" style="color: var(--text-sub); margin-bottom: 20px;"></p>
+          <button type="button" id="td-book-another-btn" class="btn-secondary-action">Schedule Another Vehicle</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- City Picker Modal -->
+  <div class="cc-modal" id="city-modal" role="dialog" aria-modal="true" aria-labelledby="city-modal-title">
+    <div class="cc-modal-backdrop"></div>
+    <div class="cc-modal-dialog" style="max-width: 500px;">
+      <div class="cc-modal-header">
+        <h3 id="city-modal-title">Select Your Region</h3>
+        <button type="button" class="cc-modal-close" aria-label="Close Modal">&times;</button>
+      </div>
+      <div class="cc-modal-body">
+        <div class="city-picker-grid" id="city-list-slot">
+          <!-- Populated by app.js -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wishlist Drawer -->
+  <div class="cc-modal cc-drawer" id="wishlist-drawer" role="dialog" aria-modal="true" aria-labelledby="wishlist-title">
+    <div class="cc-modal-backdrop"></div>
+    <div class="cc-modal-dialog">
+      <div class="cc-modal-header">
+        <h3 id="wishlist-title">Your Saved Vehicles (♥)</h3>
+        <button type="button" class="cc-modal-close" aria-label="Close Drawer">&times;</button>
+      </div>
+      <div class="cc-modal-body">
+        <div class="drawer-items-wrap" id="wishlist-items-slot">
+          <!-- Populated by app.js -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="cc-footer">
+    <div class="footer-top">
+      <div class="footer-col footer-col-about">
+        <div class="cc-brand-logo">
+          <span>⚡</span> CarCraft
+        </div>
+        <p>India’s premier automotive ecosystem offering verified car inventories, transparent pricing, financial EMI tools, and seamless doorstep test drives.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Explore Cars</h4>
+        <ul>
+          <li><a href="car.html">Full Inventory</a></li>
+          <li><a href="index.html#trending-section">Trending Models</a></li>
+          <li><a href="car.html">Electric Vehicles</a></li>
+          <li><a href="car.html">Luxury Collection</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Financial Tools</h4>
+        <ul>
+          <li><a href="index.html#emi-calculator-section">EMI Calculator</a></li>
+          <li><a href="index.html#emi-calculator-section">Loan Pre-Approval</a></li>
+          <li><a href="index.html#trust-section">Price Valuation Guide</a></li>
+          <li><a href="index.html#trust-section">Insurance Estimates</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Trust & Security</h4>
+        <ul>
+          <li><a href="index.html#trust-section">Bharat NCAP Safety</a></li>
+          <li><a href="index.html#trust-section">200-Point Inspection</a></li>
+          <li><a href="index.html#trust-section">7-Day Guarantee</a></li>
+          <li><a href="index.html#trust-section">Privacy Protection</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>&copy; 2026 CarCraft Platform. All rights reserved. Built with zero vulnerabilities.</div>
+      <div class="security-badge-footer">
+        <span>🛡</span> Secure Platform • CSP Enforced • No DOM-XSS
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts (Load in strict order) -->
+  <script src="data.js"></script>
+  <script src="security.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
